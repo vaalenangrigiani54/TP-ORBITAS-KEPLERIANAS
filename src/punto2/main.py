@@ -1,16 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import math
 import sys
 import os
+from defs import MU_TIERRA
+from lib.integradores import rk4_step
 
 # Agregamos la carpeta padre al path para poder importar lib
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from lib.integradores import rk4_step
 
-# Constante de gravitación terrestre (mu = G * mTierra) en km^3/s^2
-MU_TIERRA = 398600.4418
 
 # ==========================================
 # LÓGICA FÍSICA Y DE PROPAGACIÓN
@@ -61,6 +59,7 @@ def propagar_orbita(P0, V0, paso_dt=1.0):
         
     return historial
 
+
 # ==========================================
 # LÓGICA DE PRESENTACIÓN (GRÁFICOS)
 # ==========================================
@@ -89,11 +88,12 @@ def graficar_orbitas(resultados_orbitas):
     plt.tight_layout()
     plt.show()
 
+
 # ==========================================
 # FUNCIÓN PRINCIPAL
 # ==========================================
 
-def main():
+if __name__ == "__main__":
     # Agrupamos la configuración inicial en un diccionario (Estructura de datos limpia)
     config_orbitas = {
         'Circular': {
@@ -129,6 +129,3 @@ def main():
 
     # Llamamos a la función dedicada exclusivamente a graficar
     graficar_orbitas(resultados)
-
-if __name__ == "__main__":
-    main()

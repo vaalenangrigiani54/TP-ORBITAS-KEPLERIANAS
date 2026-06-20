@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 import math
 import sys
 import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from defs import MU_TIERRA
 from lib.integradores import rk4_step
 
-MU_TIERRA = 398600.4418
+# Agregamos la carpeta padre al path para poder importar lib
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 def dinamica_orbital(t, state):
     r_vec = state[0:3]
