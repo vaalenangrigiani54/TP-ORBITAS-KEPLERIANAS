@@ -19,12 +19,13 @@ class PolinomioCubico:
         self.D = D
         self.rango_X = rango_X
 
-    def plot(self, puntos: int = 256, **kwargs):
+    def plot(self, puntos: int = 256, ax=None, **kwargs):
         """
         Grafica el polinomio sobre el gráfico actual de `matplotlib`.
 
         Args:
             puntos: Cantidad de muestras para dibujar la curva
+            ax: Ejes de matplotlib sobre el cual graficar (opcional)
             **kwargs: Argumentos extra para `matplotlib.pyplot.plot()`
         """
 
@@ -32,7 +33,10 @@ class PolinomioCubico:
         x = np.linspace(xmin, xmax, puntos)
         y = self(x)
 
-        return plt.plot(x, y, **kwargs)
+        if ax is None:
+            return plt.plot(x, y, **kwargs)
+        else:
+            return ax.plot(x, y, **kwargs)
 
     def __call__(self, x) -> float:
         dx = x - self.k

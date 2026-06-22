@@ -1,4 +1,4 @@
-from polinomio import PolinomioCubico
+from .polinomio import PolinomioCubico
 import numpy as np
 
 
