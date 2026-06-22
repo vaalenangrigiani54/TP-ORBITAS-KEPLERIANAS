@@ -1,63 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 import sys
 import os
-from defs import MU_TIERRA
-from lib.integradores import rk4_step
 
-# Agregamos la carpeta padre al path para poder importar lib
+# Agregamos la carpeta padre al path para poder importar utils y lib
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
-# ==========================================
-# LÓGICA FÍSICA Y DE PROPAGACIÓN
-# ==========================================
-
-def dinamica_orbital(t, state):
-    """Evalúa la ecuación diferencial del satélite LEO."""
-    r_vec = state[0:3]
-    v_vec = state[3:6]
-    r_norm = np.linalg.norm(r_vec)
-    
-    if math.isclose(r_norm, 0.0, abs_tol=1e-9):
-        raise ValueError("Error: División por radio casi nulo (posible colisión).")
-    
-    a_vec = - (MU_TIERRA / (r_norm**3)) * r_vec
-    
-    d_state = np.zeros(6)
-    d_state[0:3] = v_vec
-    d_state[3:6] = a_vec
-    
-    return d_state
-
-def calcular_periodo_orbital(r0_vec, v0_vec):
-    """Calcula el período orbital en segundos usando la energía específica."""
-    r = np.linalg.norm(r0_vec)
-    v = np.linalg.norm(v0_vec)
-    energia_esp = (v**2) / 2.0 - (MU_TIERRA / r)
-    a = -MU_TIERRA / (2.0 * energia_esp)
-    T = 2 * np.pi * np.sqrt((a**3) / MU_TIERRA)
-    return T
-
-def propagar_orbita(P0, V0, paso_dt=1.0):
-    """Propaga una órbita completa usando RK4."""
-    periodo = calcular_periodo_orbital(P0, V0)
-    pasos_totales = int(np.floor(periodo / paso_dt))
-    
-    historial = np.zeros((pasos_totales, 6))
-    historial[0, 0:3] = P0
-    historial[0, 3:6] = V0
-    
-    t_actual = 0.0
-    estado_actual = historial[0]
-    
-    for i in range(1, pasos_totales):
-        estado_actual = rk4_step(dinamica_orbital, t_actual, estado_actual, paso_dt)
-        historial[i] = estado_actual
-        t_actual += paso_dt
-        
-    return historial
+from punto2.utils import propagar_orbita
 
 
 # ==========================================
@@ -93,7 +42,7 @@ def graficar_orbitas(resultados_orbitas):
 # FUNCIÓN PRINCIPAL
 # ==========================================
 
-if __name__ == "__main__":
+def main_2b():
     # Agrupamos la configuración inicial en un diccionario (Estructura de datos limpia)
     config_orbitas = {
         'Circular': {
@@ -129,3 +78,7 @@ if __name__ == "__main__":
 
     # Llamamos a la función dedicada exclusivamente a graficar
     graficar_orbitas(resultados)
+
+
+if __name__ == "__main__":
+    main_2b()
